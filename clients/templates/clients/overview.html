@@ -1,0 +1,14 @@
+{% for client in clients %}
+	<li>{{ client.company }} &mdash; {{ client.name }}
+{% empty %}
+	There are no clients available.
+{% endfor %}
+
+<form action="{% url 'clients:add' %}" method="post">
+	{% csrf_token %}
+	
+	Company: <input type="text" name="company" />
+	Contact: <input type="text" name="name" />
+	
+	<input type="submit" value="Add" />
+</form>
