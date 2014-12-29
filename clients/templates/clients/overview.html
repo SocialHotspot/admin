@@ -20,8 +20,8 @@
 						{% for client in clients %}
 							<li>
 								<a href="{% url 'clients:detail' client.slug %}" class="ui-grid-a">
-									<div class="ui-block-a">{{ client.company }}</div>
-									<div class="ui-block-b">{{ client.name }}</div>
+									<div class="ui-block-a">{{ client.company_name }}</div>
+									<div class="ui-block-b">{{ client.contact_name }}</div>
 								</a>
 							</li>
 						{% empty %}
@@ -41,8 +41,8 @@
 					<form action="{% url 'clients:add' %}" method="post" name="add_form">
 						{% csrf_token %}
 						
-						Company: <input type="text" name="company" />
-						Contact: <input type="text" name="name" />
+						Company: <input type="text" name="company_name" />
+						Contact: <input type="text" name="contact_name" />
 						
 						<button data-theme="b" data-icon="plus">Add</button>
 					</form>
