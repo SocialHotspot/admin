@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
 from django.views.generic import ListView, DetailView
@@ -26,3 +27,10 @@ def add(request):
 	client.save()
 	
 	return HttpResponseRedirect(reverse('clients:overview'))
+
+def portal_preview(request, client_id):
+	client = Client.objects.get(pk = client_id)
+	
+	return render(request, 'clients/portal/index.html', {
+        'client': client
+    })

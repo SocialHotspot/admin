@@ -1,0 +1,146 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+	<base href="http://portal.socialhotspotmanager.com/" />
+
+    <meta name="apple-mobile-web-app-capable"
+      content="yes" />
+      
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=9" />
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui"> 
+
+	<link rel="stylesheet" href="js/jquery.bundle.css" />
+	
+	<script src="js/jquery.bundle.js"></script>
+	
+	<style>
+	#header {
+		background-image: none;
+		background-color: white;
+		
+		border: none;
+		
+		-moz-box-shadow: 0px 0px 4px #000;
+		-webkit-box-shadow: 0px 0px 4px #000;
+		box-shadow: 0px 0px 4px #000;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=90, Color='#000000')";
+		filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=90, Color='#000000');
+		
+		height: 110px !important;
+	}
+	
+	[data-role=page]{height: 100% !important; position:relative !important;}
+	</style>
+	
+	<title>{{ client.company_name }} – Social Hotspot</title>
+
+    
+</head>
+<body>
+	<style>
+	#page {
+		height: auto !important;
+	}
+	</style>
+	
+	<div data-role="page" id="page">
+	
+		<div data-role="header" data-theme="g" id="header" style="height: 110px; text-align: center; overflow: hidden;">
+			<img src="http://portal.socialhotspotmanager.com/images/0e01938fc48a2cfb5f2217fbfb00722d.png" style="max-width: 100%; max-height: 110px; margin-top: 0px;" />
+			
+			<br />
+		</div>
+
+		<div data-role="content">
+			<p><strong>Welkom bij {{ client.company_name }}.</strong></p>
+			<p>Kies één van de volgende opties om gratis internettoegang te krijgen:</p>
+		
+			<ul data-role="listview" data-inset="true">
+			
+				{% if client.portal.facebook_enabled %}
+				<li style="height: 55px;">
+					<a class="medium" href='/<?=$id ?>/facebook' rel='external' onclick='startLoading("facebook"); return false;' style='margin-top: 6px;'>
+						<img src='fb.png' class="ui-li-icon" style="width: 34px !important; margin-top: -10px; border-radius: 4px; max-width: none; max-height: none;" />
+						<span style="margin-left: 15px;">Like ons op Facebook</span>
+					</a>
+				</li>
+				{% endif %}
+				
+				{% if client.portal.email_enabled %}
+				<li style="height: 55px;">
+					<a class="medium" href='/<?=$id ?>/email' rel='external' onclick='startLoading("email"); return false;' style='margin-top: 6px;'>
+						<img src='email.png' class="ui-li-icon" style="opacity: 0.75; width: 34px !important; margin-top: -10px; border-radius: 4px; max-width: none; max-height: none;" />
+						<span style="margin-left: 15px; font-weight: normal;">Log in met je e-mailadres</span>
+					</a>
+				</li>
+				{% endif %}
+				
+			</ul>
+			
+			<br />
+			<center>
+				{% if client.portal.password_enabled %}
+					<strong style="position: relative; top: -17px;"><a style="text-decoration: none; color: #666666; border-bottom: 1px solid #ccc;" href="#">Ik heb geen Facebook-account</a></strong>
+					<br />
+				{% endif %}
+			
+				<p><strong style="position: relative; top: -10px;"><a data-rel="dialog" style="text-decoration: none; font-size: 10pt;" href="#">Algemene Voorwaarden</a></strong></p>
+				
+			</center>
+			<br />
+			
+		</div>
+		
+		<style>
+		#page_footer[data-theme="g"] {
+			background-image: none;
+			background-color: white;
+			border: 1px solid #ccc;
+		}
+			
+		p {
+			background: transparent;
+		}
+		
+		@media screen and (max-height: 370px) {
+			#page_footer {
+				position: static !important;
+				top: auto;
+				bottom: auto;
+			}
+		}
+		
+		@media screen and (min-height: 370px) {
+			#page_footer {
+				bottom:0; position:absolute !important; top: auto !important; width:100%;
+			}
+		}
+		</style>
+
+		<div data-role="footer" data-theme="g" id="page_footer" style="height: 44px;  width: 100%;">
+			<div style="text-align: center; height: 30px; padding-top: 0px; margin-top: -9px;">
+				<a style="text-decoration: none; color: white;" href="http://socialhotspot.nl/mobile/mobile.php">
+			
+					<img src="/portal_logo.png" style="height: 50px; position: absolute; left: 20px;" />
+					
+					<div style="float: right; margin-top: 20px; margin-right: 15px;" class="locales">
+		
+						<a href='setlocale.php?l=en' data-ajax='false' style="text-decoration: none;">
+							<img src="/locales/en.png" style="height: 24px;" />
+						</a>
+						
+						<a href='setlocale.php?l=de' data-ajax='false' style="text-decoration: none; margin-left: 3px;">
+							<img src="/locales/de.png" style="height: 24px;" />
+						</a>
+		
+					</div>
+				
+				</a>
+			</div>
+		</div>
+
+</body>
+</html>
