@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Account settings{% endblock %}
+{% block header %}Account settings &mdash; {{ request.user.first_name }} {{ request.user.last_name }}{% endblock %}
+
+{% block menu %}
+	{% include 'menu.html' with active_item='account' %}
+{% endblock %}
+
+{% block content %}
+	<div class="ui-grid-a">
+		<div class="ui-block-a" style="padding-right: 10px;">
+			<ul data-role="listview" data-inset="true">
+		
+				{% for device in devices.all %}
+					<li>{{ device.mac_address}} &mdash; {{ device.description }}
+				{% empty %}
+					You have no registered devices.
+				{% endfor %}
+				
+			</ul>
+		</div>
+			
+		<div class="ui-block-b" style="padding-left: 10px;">
+			<form method="post" action="{% url 'accounts:add_device' %}">
+				{% csrf_token %}
+				
+				Device name: <input type="text" name="description" />
+				MAC address: <input type="text" name="mac_address" />
+				
+				<button data-theme="b" data-icon="plus">Add</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}

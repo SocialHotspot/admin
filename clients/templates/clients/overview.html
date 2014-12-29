@@ -1,14 +1,49 @@
-{% for client in clients %}
-	<li>{{ client.company }} &mdash; {{ client.name }}
-{% empty %}
-	There are no clients available.
-{% endfor %}
+{% extends 'base.html' %}
 
-<form action="{% url 'clients:add' %}" method="post">
-	{% csrf_token %}
-	
-	Company: <input type="text" name="company" />
-	Contact: <input type="text" name="name" />
-	
-	<input type="submit" value="Add" />
-</form>
+{% block title %}Client overview{% endblock %}
+{% block header %}Client overview{% endblock %}
+
+{% block menu %}
+	{% include 'menu.html' with active_item='clients' %}
+{% endblock %}
+
+{% block content %}
+	<div class="ui-grid-a">
+		<div class="ui-block-a" style="padding-right: 10px;">
+
+			<div data-role="listview" data-inset="true">
+				<li>
+					<ul data-role="listview" data-inset="true" data-filter="true">
+				
+						{% for client in clients %}
+							<li>
+								<a href="{% url 'clients:detail' client.slug %}" class="ui-grid-a">
+									<div class="ui-block-a">{{ client.company }}</div>
+									<div class="ui-block-b">{{ client.name }}</div>
+								</a>
+							</li>
+						{% empty %}
+							<li>There are no clients available.</li>
+						{% endfor %}
+						
+					</ul>
+				</li>
+			</div>
+		</div>
+			
+		<div class="ui-block-b" style="padding-left: 10px;">
+			<div data-role="listview" data-inset="true">
+				<li>
+					<form action="{% url 'clients:add' %}" method="post" name="add_form">
+						{% csrf_token %}
+						
+						Company: <input type="text" name="company" />
+						Contact: <input type="text" name="name" />
+						
+						<button data-theme="b" data-icon="plus">Add</button>
+					</form>
+				</li>
+			</div>
+		</div>
+	</div>
+{% endblock %}
