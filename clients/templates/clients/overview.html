@@ -12,6 +12,8 @@
 		<div class="ui-block-a" style="padding-right: 10px;">
 
 			<div data-role="listview" data-inset="true">
+				<li data-role="list-divider">Clients</li>
+				
 				<li>
 					<ul data-role="listview" data-inset="true" data-filter="true">
 				
@@ -33,6 +35,8 @@
 			
 		<div class="ui-block-b" style="padding-left: 10px;">
 			<div data-role="listview" data-inset="true">
+				<li data-role="list-divider">Add a new client</li>
+				
 				<li>
 					<form action="{% url 'clients:add' %}" method="post" name="add_form">
 						{% csrf_token %}

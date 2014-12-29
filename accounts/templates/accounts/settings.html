@@ -11,25 +11,32 @@
 	<div class="ui-grid-a">
 		<div class="ui-block-a" style="padding-right: 10px;">
 			<ul data-role="listview" data-inset="true">
+				<li data-role="list-divider">Admin devices</li>
 		
 				{% for device in devices.all %}
 					<li>{{ device.mac_address}} &mdash; {{ device.description }}
 				{% empty %}
-					You have no registered devices.
+					<li>You have no registered devices.</li>
 				{% endfor %}
 				
 			</ul>
 		</div>
 			
 		<div class="ui-block-b" style="padding-left: 10px;">
-			<form method="post" action="{% url 'accounts:add_device' %}">
-				{% csrf_token %}
+			<div data-role="listview" data-inset="true">
+				<li data-role="list-divider">Add an admin device</li>
 				
-				Device name: <input type="text" name="description" />
-				MAC address: <input type="text" name="mac_address" />
-				
-				<button data-theme="b" data-icon="plus">Add</button>
-			</form>
+				<li>
+					<form method="post" action="{% url 'accounts:add_device' %}">
+						{% csrf_token %}
+						
+						Device name: <input type="text" name="description" />
+						MAC address: <input type="text" name="mac_address" />
+						
+						<button data-theme="b" data-icon="plus">Add</button>
+					</form>
+				</li>
+			</div>
 		</div>
 	</div>
 {% endblock %}
