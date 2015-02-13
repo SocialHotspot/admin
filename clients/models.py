@@ -57,6 +57,12 @@ class Hotspot(models.Model):
 	external_id = models.IntegerField(null = False, default = 1000)
 	
 	@staticmethod
+	def filter_used(aps):
+		existing_macs = [ hotspot.mac_address for hotspot in Hotspot.objects.all() ]
+		
+		return [ ap for ap in aps if ap['mac'] not in existing_macs ]
+	
+	@staticmethod
 	def latest_id():
 		latest = Hotspot.objects.order_by('-external_id').first()
 		

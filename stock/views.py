@@ -25,6 +25,8 @@ def overview(request):
 		except HTTPError:
 			messages.error(request, "The login credentials for controller '"+ controller.name +"' are incorrect.")
 	
+	aps = Hotspot.filter_used(aps)
+	
 	return render(request, 'stock/overview.html', {
 	    'aps': aps
 	})
