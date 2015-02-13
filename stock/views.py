@@ -17,13 +17,13 @@ def overview(request):
 	
 	aps = []
 	
-	for c in controllers:
+	for controller in controllers:
 		try:
-			c = c.controller()
+			c = controller.controller()
 			aps += c.get_aps()
 			
 		except HTTPError:
-			messages.error(request, "The login credentials for controller '"+ c.name +"' are incorrect.")
+			messages.error(request, "The login credentials for controller '"+ controller.name +"' are incorrect.")
 	
 	return render(request, 'stock/overview.html', {
 	    'aps': aps
