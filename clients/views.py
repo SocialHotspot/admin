@@ -39,7 +39,6 @@ def portal(request, slug):
 	    'portal': client.portal
 	})
 	
-	
 @login_required   
 def add_hotspot(request, slug):
 	client = Client.objects.get(slug = slug)

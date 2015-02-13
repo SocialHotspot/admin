@@ -12,14 +12,14 @@ from clients.views import portal_preview
 urlpatterns = patterns('',
     url(r'^$', login_required(ClientList.as_view()), name='overview'),
     
+    url(r'^add/$', add, name='add'),
+    
     url(r'^detail/(?P<slug>[\w-]+)/$', login_required(ClientDetail.as_view()), name='detail'),
     
     url(r'^detail/(?P<slug>[\w-]+)/hotspots$', hotspots, name='hotspots'),
     url(r'^detail/(?P<slug>[\w-]+)/add_hotspot$', add_hotspot, name='add_hotspot'),
     
     url(r'^detail/(?P<slug>[\w-]+)/portal$', portal, name='portal'),
-    
-    url(r'^add/$', add, name='add'),
     
     url(r'^portal/(?P<slug>[\w-]+)/$', portal_preview, name='portal_preview'),
 )

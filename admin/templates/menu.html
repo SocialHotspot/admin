@@ -1,5 +1,8 @@
-<a data-role="button" href="{% url 'clients:overview' %}" {% if active_item == 'clients' %}class="ui-btn-active"{% endif %}>Clients</a>
-
+<div data-type="horizontal" data-role="controlgroup" class="ui-btn-left">
+	<a data-role="button" href="{% url 'clients:overview' %}" {% if active_item == 'clients' %}class="ui-btn-active"{% endif %}>Clients</a>
+	<a data-role="button" href="{% url 'stock:overview' %}" {% if active_item == 'stock' %}class="ui-btn-active"{% endif %}>Stock</a>
+</div>
+	
 <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">
 	<a data-role="button" href="{% url 'accounts:settings' %}" {% if active_item == 'account' %}class="ui-btn-active"{% endif %}>Account</a>
 </div>
