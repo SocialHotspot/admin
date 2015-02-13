@@ -37,7 +37,6 @@ class Portal(models.Model):
 	def facebook_enabled(self):
 		return (self.facebook_page_id is not None)
 	
-
 	email_enabled = models.BooleanField(default = False)
 	checkin_enabled = models.BooleanField(default = False)
 	
@@ -45,6 +44,14 @@ class Portal(models.Model):
 	
 	def password_enabled(self):
 		return (len(self.guest_password) != 0)
+		
+# Hotspots		
+class Hotspot(models.Model):
+	class Meta:
+		db_table = 'hotspot'
+	
+	mac_address = models.CharField(max_length = 255, null = True)
+	client = models.ForeignKey('Client', related_name='hotspots', null = True)
 	
 
 # Automatically generate a client slug

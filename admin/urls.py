@@ -6,4 +6,6 @@ urlpatterns = patterns('',
 
 	url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^clients/', include('clients.urls', namespace='clients')),
+    
+    url(r'^api/', include('api.urls', namespace='api')),
 )

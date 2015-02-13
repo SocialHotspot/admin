@@ -1,0 +1,36 @@
+{% extends 'clients/detail.html' %}
+
+{% block tabs %}
+	{% include 'clients/tabs.html' with active_item='hotspots' %}
+{% endblock %}
+
+{% block content %}
+
+	<div data-role="listview" data-inset="true">
+		<li data-role="list-divider">Hotspots</li>
+		
+		<li>
+			{% if messages %}
+				{% for message in messages %}		
+					<div class="error">{{ message }}</div>
+				{% endfor %}
+			{% endif %}
+			
+			<ul data-role="listview" data-inset="true" data-filter="true">
+		
+				{% for hotspot in hotspots %}
+					<li>
+						{{ hotspot.mac_address | upper }}
+					</li>
+				{% empty %}
+					<li>There are no hotspots available.</li>
+				{% endfor %}
+				
+			</ul>
+			
+			<div>
+				<a href="add_hotspot" data-role="button" data-icon="plus" data-inline="true" data-mini="true">&nbsp;Attach new</a>
+			</div>
+		</li>
+	</div>
+{% endblock %}

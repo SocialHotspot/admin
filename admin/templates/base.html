@@ -13,6 +13,27 @@
 	</script>
     <script type="text/javascript" src="{% static 'jquery.mobile-1.4.5.min.js' %}"></script>
     
+    <style>
+	    .error {
+		    display: block;
+		    
+		    box-sizing: border-box;
+
+		    padding-top: 15px;
+		    padding-bottom: 15px;
+		    padding-left: 15px;
+		    
+		    margin-bottom: 16px;
+		    
+		    background-color: #efefef;
+		    
+		    border-radius: 6px;
+		    border: 1px solid rgb(221, 221, 221);
+		    
+		    font-weight: bold;
+	    }
+	</style>
+    
     <title>{% block title %}My amazing site{% endblock %}</title>
 </head>
 
@@ -25,6 +46,8 @@
             {% block menu %}
             	{% include 'menu.html' %}
             {% endblock %}
+
+			{% block tabs %}{% endblock %}
         </div>
  
         <div data-role="content">

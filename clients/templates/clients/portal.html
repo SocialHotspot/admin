@@ -1,0 +1,16 @@
+{% extends 'clients/detail.html' %}
+
+{% block tabs %}
+	{% include 'clients/tabs.html' with active_item='portal' %}
+{% endblock %}
+
+{% block content %}
+	<div data-role="listview" data-inset="true">
+		<li data-role="list-divider">Portal</li>
+		
+		<li>
+			<h1>{{ client.company_name }}</h1>
+			<em>{{ client.contact_name }}</em>
+		</li>
+	</div>
+{% endblock %}

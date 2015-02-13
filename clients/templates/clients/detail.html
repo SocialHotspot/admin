@@ -7,8 +7,14 @@
 	{% include 'menu.html' with active_item='clients' %}
 {% endblock %}
 
+{% block tabs %}
+	{% include 'clients/tabs.html' with active_item='info' %}
+{% endblock %}
+
 {% block content %}
 	<div data-role="listview" data-inset="true">
+		<li data-role="list-divider">Information</li>
+		
 		<li>
 			<h1>{{ client.company_name }}</h1>
 			<em>{{ client.contact_name }}</em>
