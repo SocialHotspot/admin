@@ -1,9 +1,11 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
 from django.views.generic import ListView, DetailView
+
 from clients.models import Client, Hotspot
+from unifi_control.models import UnifiController
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -39,14 +41,55 @@ def portal(request, slug):
 	    'portal': client.portal
 	})
 	
+@login_required
+def set_portal_settings(request, slug):
+	client = Client.objects.get(slug = slug)
+	portal = client.portal
+	
+	setting = request.POST['setting']
+	value = request.POST['value']
+	
+	booleanFields = ['facebook_enabled', 'password_enabled']
+	valueFields = ['facebook_page_id', 'guest_password']
+	
+	if not (setting in booleanFields):
+		
+		if setting in valueFields:
+			setattr(portal, setting, value)
+		else:
+			setattr(portal, setting, (value == 'true'))
+			
+	else:
+		if setting == 'facebook_enabled' and value == 'false':
+			portal.facebook_page_id = None
+				
+		elif setting == 'password_enabled' and value == 'false':
+			portal.guest_password = None
+	
+	portal.save()
+	
+	return HttpResponse()
+	
 @login_required   
 def add_hotspot(request, slug):
 	client = Client.objects.get(slug = slug)
 	
-	hotspot = Hotspot.objects.filter(client_id = None).first()
+	controllers = UnifiController.get_with_stock()
+	aps = []
 	
-	if hotspot:
-		client.hotspots.add(hotspot)
+	existing_macs = [ hotspot.mac_address for hotspot in Hotspot.objects.all() ]
+	
+	for c in controllers:
+		c = c.controller()
+		aps += c.get_aps()
+	
+	available = [ ap for ap in aps if ap['mac'] not in existing_macs ]
+	
+	if len(available):
+		ap = available[0]
+		
+		hotspot = Hotspot(mac_address = ap['mac'], client_id = client.id, external_id = (Hotspot.latest_id() + 1))
+		hotspot.save()
 	else:
 		messages.error(request, 'There are no hotspots left in stock.')
 	
@@ -65,6 +108,6 @@ def add(request):
 def portal_preview(request, slug):
 	client = Client.objects.get(slug = slug)
 	
-	return render(request, 'clients/portal/index.html', {
+	return render(request, 'clients/portal/cilis/start.html', {
 	    'client': client
 	})

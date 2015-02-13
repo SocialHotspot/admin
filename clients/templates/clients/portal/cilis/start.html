@@ -1,0 +1,27 @@
+{% extends 'clients/portal/cilis/base.html' %}
+
+{% block content %}
+
+	<p>Welcome to Amsterdam! Click the button to connect to the internet.</p>
+	
+	<?php
+	$app_id = "1512177089031871";
+	$app_secret = "7d444a92e815a095a5cb33364849517b";
+	
+	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+	$my_url = $protocol . "portal.globalwifiservices.com/cilis/back.php";
+	
+	$_SESSION['fb_state'] = session_id();
+	
+	$dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url) . "&state=" . $_SESSION['fb_state'] ."&scope=user_likes,publish_actions";
+	
+	$_SESSION['next'] = $dialog_url;
+	?>
+	
+	<a class="button action" href="access.php">Go online</a>
+	
+	<strong>
+		Click for free internet access
+	</strong>
+	
+{% endblock %}

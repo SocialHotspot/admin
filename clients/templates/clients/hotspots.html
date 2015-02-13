@@ -20,7 +20,15 @@
 		
 				{% for hotspot in hotspots %}
 					<li>
-						{{ hotspot.mac_address | upper }}
+						<div class="ui-grid-a">
+							<div class="ui-block-a">
+								<em>#{{ hotspot.external_id }}</em>
+							</div>
+							
+							<div class="ui-block-b">
+								{{ hotspot.mac_address | upper }}
+							</div>
+						</div>
 					</li>
 				{% empty %}
 					<li>There are no hotspots available.</li>

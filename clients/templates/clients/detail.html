@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Client overview{% endblock %}
-{% block header %}Client overview{% endblock %}
+{% block header %}<span class="title-method">Editing client:</span> {{ client.company_name }}{% endblock %}
 
 {% block menu %}
 	{% include 'menu.html' with active_item='clients' %}

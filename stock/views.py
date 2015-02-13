@@ -2,19 +2,32 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
-from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 
 from clients.models import Hotspot
+from unifi_control.models import UnifiController
+
+from urllib2 import HTTPError
+from django.contrib import messages
+        
+@login_required
+def overview(request):
 	
-class StockList(ListView):
-    model = Hotspot
-    context_object_name = 'hotspots'
-    
-    template_name = 'stock/overview.html'
-    
-    def get_queryset(self):
-        return Hotspot.objects.filter(client_id = None)
+	controllers = UnifiController.get_with_stock()
+	
+	aps = []
+	
+	for c in controllers:
+		try:
+			c = c.controller()
+			aps += c.get_aps()
+			
+		except HTTPError:
+			messages.error(request, "The login credentials for controller '"+ c.name +"' are incorrect.")
+	
+	return render(request, 'stock/overview.html', {
+	    'aps': aps
+	})
     
 @login_required   
 def add(request):

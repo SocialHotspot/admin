@@ -39,6 +39,7 @@ class Portal(models.Model):
 	
 	email_enabled = models.BooleanField(default = False)
 	checkin_enabled = models.BooleanField(default = False)
+	direct_access = models.BooleanField(default = False)
 	
 	guest_password = models.CharField(max_length = 255, null = True)
 	
@@ -53,6 +54,16 @@ class Hotspot(models.Model):
 	mac_address = models.CharField(max_length = 255, null = True)
 	client = models.ForeignKey('Client', related_name='hotspots', null = True)
 	
+	external_id = models.IntegerField(null = False, default = 1000)
+	
+	@staticmethod
+	def latest_id():
+		latest = Hotspot.objects.order_by('-external_id').first()
+		
+		if latest:
+			return latest.external_id
+		else:
+			return 1000
 
 # Automatically generate a client slug
 def create_client_slug(sender, instance, **kwargs):

@@ -12,7 +12,7 @@
 		<div class="ui-block-a" style="padding-right: 10px;">
 
 			<div data-role="listview" data-inset="true">
-				<li data-role="list-divider">Hotspots</li>
+				<li data-role="list-divider">Stock hotspots</li>
 				
 				<li>
 					{% if messages %}
@@ -23,9 +23,33 @@
 					
 					<ul data-role="listview" data-inset="true" data-filter="true">
 				
-						{% for hotspot in hotspots %}
+						{% for ap in aps %}
 							<li>
-								{{ hotspot.mac_address | upper }}
+								<div class="ui-grid-c">
+									<div class="ui-block-a">
+										{{ ap.mac | upper }}
+									</div>
+									
+									<div class="ui-block-b">
+										{% if ap.model.upper == 'P2N' %}
+											Picostation M2
+										{% else %}
+											Unifi AP
+										{% endif %}
+									</div>
+									
+									<div class="ui-block-c">
+										<em>{{ ap.name }}</em>
+									</div>
+									
+									<div class="ui-block-c">
+										{% if ap.state %}
+											<span class="connected">Connected</span>
+										{% else %}
+											<span class="disconnected">Disconnected</span>
+										{% endif %}
+									</div>
+								</div>
 							</li>
 						{% empty %}
 							<li>There are no hotspots available.</li>
@@ -37,7 +61,7 @@
 			
 		</div>
 			
-		<div class="ui-block-b" style="padding-left: 10px;">
+		<div class="ui-block-b" style="padding-left: 10px; opacity: 0.5;">
 			<div data-role="listview" data-inset="true">
 				<li data-role="list-divider">Add hotspot to stock</li>
 				
