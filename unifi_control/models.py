@@ -16,8 +16,11 @@ class UnifiController(models.Model):
 	
 	version = models.CharField(max_length = 2, default = 'v3', null = False)
 	
-	def controller(self):
-		return Controller(self.host, self.username, self.password, self.version, self.stock_site)
+	def controller(self, site = False):
+		if site:
+			return Controller(self.host, self.username, self.password, self.version, site)
+		else:
+			return Controller(self.host, self.username, self.password, self.version, self.stock_site)
 	
 	@staticmethod
 	def get_with_stock():
