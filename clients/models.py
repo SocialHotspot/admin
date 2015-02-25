@@ -24,6 +24,8 @@ class Client(models.Model):
 	country = models.CharField(max_length = 2, null = True)
 	
 	unifi_site = models.CharField(max_length = 24, null = True)
+	unifi_controller = models.OneToOneField('unifi_control.UnifiController', related_name='clients', null = True)
+	
 	parent = models.ForeignKey('Client', related_name='subclients', null = True)
 
 # Portals	
