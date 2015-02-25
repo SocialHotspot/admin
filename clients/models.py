@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
+from django.conf import settings
+
 import requests
 
 # Clients		
@@ -80,7 +82,7 @@ class Hotspot(models.Model):
 	external_id = models.IntegerField(null = False, default = 1000)
 	
 	def get_external_info(self):
-		response = requests.get('https://api.cilis.eu/1.1/hotspot/?id='+ str(self.external_id))
+		response = requests.get(settings.CILIS_API +'/hotspot/?id='+ str(self.external_id))
 		response = response.json()
 		
 		return response
