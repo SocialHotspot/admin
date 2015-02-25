@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
+import requests
+
 # Clients		
 class Client(models.Model):
 	class Meta:
@@ -43,8 +45,29 @@ class Portal(models.Model):
 	
 	guest_password = models.CharField(max_length = 255, null = True)
 	
+	base_template = models.CharField(max_length = 255, null = True)
+	
 	def password_enabled(self):
 		return (len(self.guest_password) != 0)
+		
+	def is_liked(self, graph):
+		return (len(graph.get('me/likes/'+ str(self.facebook_page_id))['data']) > 0)
+		
+# Portal users
+class PortalUser(models.Model):
+	class Meta:
+		db_table = 'portal_user'
+		
+	portal = models.ForeignKey('Portal', related_name='users', null = False)
+	
+	mac_address = models.CharField(max_length = 255, null = True)
+	state = models.IntegerField(default = 0, null = False)
+	
+	ua = models.CharField(max_length = 255, null = True)
+	ip = models.CharField(max_length = 255, null = True)
+	
+	landed = models.DateTimeField(auto_now_add = True)
+	updated = models.DateTimeField(auto_now = True)
 		
 # Hotspots		
 class Hotspot(models.Model):
@@ -55,6 +78,12 @@ class Hotspot(models.Model):
 	client = models.ForeignKey('Client', related_name='hotspots', null = True)
 	
 	external_id = models.IntegerField(null = False, default = 1000)
+	
+	def get_external_info(self):
+		response = requests.get('https://api.cilis.eu/1.1/hotspot/?id='+ str(self.external_id))
+		response = response.json()
+		
+		return response
 	
 	@staticmethod
 	def filter_used(aps):
