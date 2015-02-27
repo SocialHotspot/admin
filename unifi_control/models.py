@@ -18,9 +18,9 @@ class UnifiController(models.Model):
 	
 	def controller(self, site = False):
 		if site:
-			return Controller(self.host, self.username, self.password, self.version, site)
+			return Controller(self.host, self.username, self.password, version = self.version, site_id = site)
 		else:
-			return Controller(self.host, self.username, self.password, self.version, self.stock_site)
+			return Controller(self.host, self.username, self.password, version = self.version, site_id = self.stock_site)
 	
 	@staticmethod
 	def get_with_stock():
