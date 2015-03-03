@@ -7,6 +7,4 @@ urlpatterns = patterns('',
 	url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^clients/', include('clients.urls', namespace='clients')),
     url(r'^stock/', include('stock.urls', namespace='stock')),
-    
-    url(r'^api/', include('api.urls', namespace='api')),
 )

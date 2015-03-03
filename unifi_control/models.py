@@ -1,4 +1,8 @@
 from django.db import models
+
+import sys
+sys.path.insert(0, '/Users/Jesse/Documents/SH-Python/unifi-api/')
+
 from unifi.controller import Controller
 
 # Unifi controller

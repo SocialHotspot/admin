@@ -38,7 +38,9 @@ def portal(request, slug):
 	
 	return render(request, 'clients/portal.html', {
 	    'client': client,
-	    'portal': client.portal
+	    'portal': client.portal,
+	    
+	    'preview_hotspot': client.hotspots.first()
 	})
 	
 @login_required
@@ -49,12 +51,19 @@ def set_portal_settings(request, slug):
 	setting = request.POST['setting']
 	value = request.POST['value']
 	
-	booleanFields = ['facebook_enabled', 'password_enabled']
-	valueFields = ['facebook_page_id', 'guest_password']
+	booleanFields = ['facebook_enabled', 'password_enabled', 'network_password_enabled']
+	valueFields = ['facebook_page_id', 'guest_password', 'wpa_password']
 	
 	if not (setting in booleanFields):
 		
 		if setting in valueFields:
+			if setting == 'wpa_password' and len(value) < 8:
+				value = None
+			elif setting == 'wpa_password' and len(value) >= 8:
+				controller = client.unifi_controller.controller(client.unifi_site)
+			
+				controller.set_wpa_password(value)
+					
 			setattr(portal, setting, value)
 		else:
 			setattr(portal, setting, (value == 'true'))
@@ -65,6 +74,9 @@ def set_portal_settings(request, slug):
 				
 		elif setting == 'password_enabled' and value == 'false':
 			portal.guest_password = None
+			
+		elif setting == 'network_password_enabled' and value == 'false':
+			portal.wpa_password = None
 	
 	portal.save()
 	

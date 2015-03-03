@@ -47,6 +47,18 @@
 					<label>
 						<input type="checkbox" name="direct_access" {% if portal.direct_access %}checked="true"{% endif %}>Direct
 					</label>
+					
+					<hr />
+					
+					<label>
+						<input type="checkbox" name="network_password_enabled" {% if portal.network_password_enabled %}checked="true"{% endif %}>Network password (WPA)
+					</label>
+					
+					<div id="wpa_password_container" {% if not portal.network_password_enabled %}style="display: none;"{% endif %}>
+						<input type="text" class="setting-field" id="wpa_password" placeholder="123456789" {% if portal.network_password_enabled %}value="{{ portal.wpa_password }}"{% endif %} />
+						
+						<em><small>The password needs to be between 8 and 64 characters.</small></em>
+					</div>
 				
 					<script type="text/javascript">
 						$(document).ready(function() {
@@ -71,9 +83,16 @@
 												$('#guest_password').val('')
 												$('#guest_password').focus()
 												
+											} else if(self.attr('name') == 'network_password_enabled') {
+												
+												$('#wpa_password_container').toggle()
+												
+												$('#wpa_password').val('')
+												$('#wpa_password').focus()
+												
 											}
 											
-											if(!((self.attr('name') == 'facebook_enabled' || self.attr('name') == 'password_enabled') && self.is(':checked'))) {
+											if(!((self.attr('name') == 'facebook_enabled' || self.attr('name') == 'password_enabled' || self.attr('name') == 'network_password_enabled') && self.is(':checked'))) {
 												
 												var url = $('#preview-frame').attr('src');
 												$('#preview-frame').attr('src', url);
@@ -97,7 +116,14 @@
 												
 											});
 											
-								}, 600)
+								}, 500);
+								
+								// Validation
+								if($(this).attr('id') == 'wpa_password' && $(this).val().length < 8) {
+									$(this).css('color', '#cccccc');
+								} else {
+									$(this).css('color', 'black');
+								}
 							});
 							
 						});
@@ -113,7 +139,7 @@
 				<li data-role="list-divider">Preview</li>
 				
 				<li>
-					<iframe id="preview-frame" src="{% url 'clients:portal_preview' client.slug %}" frameborder="0" style="width: 100%; height: 500px; border: 1px solid #ccc;" />
+					<iframe id="preview-frame" src="http://dev.portal.socialhotspotmanager.com/guest/s/{{ client.unifi_site }}?ap={{ preview_hotspot.mac_address }}" frameborder="0" style="width: 100%; height: 500px; border: 1px solid #ccc;" />
 				</li>
 			</div>
 		</div>

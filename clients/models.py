@@ -48,6 +48,11 @@ class Portal(models.Model):
 	direct_access = models.BooleanField(default = False)
 	
 	guest_password = models.CharField(max_length = 255, null = True)
+
+	wpa_password = models.CharField(max_length = 64, null = True)
+	
+	def network_password_enabled(self):
+		return (self.wpa_password is not None)
 	
 	base_template = models.CharField(max_length = 255, null = True)
 	
