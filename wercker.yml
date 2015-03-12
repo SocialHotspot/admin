@@ -1,0 +1,37 @@
+box: wercker/python
+
+build:
+  steps:
+    - script:
+        name: echo python information
+        code: |
+          echo "python version $(python --version) running"
+          echo "pip version $(pip --version) running"
+          
+deploy:
+  steps:
+  - add-to-known_hosts:
+     hostname: central.sh-vpc.com
+  - mktemp:
+     envvar: PRIVATEKEY_PATH
+  - create-file:
+     name: write key
+     filename: $PRIVATEKEY_PATH
+     content: $CENTRAL_PRIVATE
+     overwrite: true
+     hide-from-log: true
+  - script:
+     name: pull application
+     code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no central.sh-vpc.com "cd /var/social/admin/ && git pull"
+  - script:
+     name: migrate database
+     code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no central.sh-vpc.com "/var/social/admin/manage.py migrate"
+  - script:
+     name: restart vassal
+     code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no central.sh-vpc.com "touch /var/social/admin_uwsgi.ini"
+  - script:
+     name: waiting for restart
+     code: sleep 5         
+  - script:
+     name: check emperor status
+     code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no central.sh-vpc.com "systemctl status emperor.uwsgi.service"
