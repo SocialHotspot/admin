@@ -5,6 +5,8 @@ from clients.views import ClientList
 from clients.views import ClientDetail
 from clients.views import hotspots
 from clients.views import add_hotspot
+from clients.views import add_hotspots_ajax
+from clients.views import set_unifi_site
 from clients.views import portal
 from clients.views import add
 from clients.views import portal_preview
@@ -14,6 +16,9 @@ urlpatterns = patterns('',
     url(r'^$', login_required(ClientList.as_view()), name='overview'),
     
     url(r'^add/$', add, name='add'),
+    
+    url(r'^detail/(?P<slug>[\w-]+)/add-hotspots/$', add_hotspots_ajax, name='add-hotspots'),
+    url(r'^detail/(?P<slug>[\w-]+)/set-unifi-site/$', set_unifi_site, name='set-unifi-site'),
     
     url(r'^detail/(?P<slug>[\w-]+)/$', login_required(ClientDetail.as_view()), name='detail'),
     

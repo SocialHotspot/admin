@@ -8,7 +8,12 @@ from clients.models import Client, Hotspot
 from unifi_control.models import UnifiController
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 from django.contrib import messages
+from django.core import serializers
+
+import re, json
 
 class ClientList(ListView):
     model = Client
@@ -25,12 +30,28 @@ class ClientDetail(DetailView):
 @login_required
 def hotspots(request, slug):
 	client = Client.objects.get(slug = slug)
-	hotspots = client.hotspots.all()
 	
-	return render(request, 'clients/hotspots.html', {
-	    'client': client,
-	    'hotspots': hotspots
-	})
+	if client.unifi_site:	
+		hotspots = client.hotspots.all()
+		
+		return render(request, 'clients/hotspots.html', {
+		    'client': client,
+		    'hotspots': hotspots
+		})
+		
+	else:
+		# Setup is required
+		if client.city:
+			unifi_site_id = client.company_name +' '+ client.city
+		else:
+			unifi_site_id = client.company_name
+		
+		unifi_site_id = re.sub(r'[^A-Za-z0-9\-]', '', unifi_site_id.lower().replace(' ', ''))[:24]
+		
+		return render(request, 'clients/setup.html', {
+		    'client': client,
+		    'unifi_site_id': unifi_site_id
+		})
 	
 @login_required
 def portal(request, slug):
@@ -77,6 +98,9 @@ def set_portal_settings(request, slug):
 			
 		elif setting == 'network_password_enabled' and value == 'false':
 			portal.wpa_password = None
+			
+			controller = client.unifi_controller.controller(client.unifi_site)
+			controller.set_wpa_password(False)
 	
 	portal.save()
 	
@@ -86,6 +110,26 @@ def set_portal_settings(request, slug):
 def add_hotspot(request, slug):
 	client = Client.objects.get(slug = slug)
 	
+	hotspots = add_hotspots_from_stock(client, 1)
+	
+	if not hotspots:
+		messages.error(request, 'There are no hotspots left in stock.')
+	
+	return HttpResponseRedirect(reverse('clients:hotspots', kwargs={ 'slug': client.slug }))
+
+@csrf_exempt
+def add_hotspots_ajax(request, slug):
+	client = Client.objects.get(slug = slug)
+	number_of_aps = int(request.POST.get('number_of_aps', 1))
+	
+	hotspots = add_hotspots_from_stock(client, number_of_aps)
+	
+	if hotspots:
+		return HttpResponse(json.dumps({ 'hotspots': hotspots }), content_type='application/json')
+	else:
+		return HttpResponse(json.dumps({ 'error': "Not enough hotspots in stock" }), content_type='application/json')
+	
+def add_hotspots_from_stock(client, number_of_aps):
 	controllers = UnifiController.get_with_stock()
 	aps = []
 	
@@ -96,16 +140,37 @@ def add_hotspot(request, slug):
 		aps += c.get_aps()
 	
 	available = [ ap for ap in aps if ap['mac'] not in existing_macs ]
+
+	if len(available) >= number_of_aps:
+		hotspots = []
 	
-	if len(available):
-		ap = available[0]
+		for ap in range(0, number_of_aps):
+			ap = available[ap]
 		
-		hotspot = Hotspot(mac_address = ap['mac'], client_id = client.id, external_id = (Hotspot.latest_id() + 1))
-		hotspot.save()
+			hotspot = Hotspot(mac_address = ap['mac'], client_id = client.id, external_id = (Hotspot.latest_id() + 1))
+			hotspot.save()
+			
+			hotspots.append(hotspot)
+			
+		hotspots = [ { 'external_id': hotspot.external_id, 'mac_address': hotspot.mac_address } for hotspot in hotspots ]
+			
+		return hotspots
 	else:
-		messages.error(request, 'There are no hotspots left in stock.')
+		return False
+		
+@csrf_exempt
+def set_unifi_site(request, slug):
+	client = Client.objects.get(slug = slug)
 	
-	return HttpResponseRedirect(reverse('clients:hotspots', kwargs={ 'slug': client.slug }))
+	site_id = request.POST['unifi_site_id']
+	controller_id = request.POST['unifi_controller']
+
+	client.unifi_site = site_id
+	client.unifi_controller_id = controller_id
+	
+	client.save()
+	
+	return HttpResponse(True)
 
 @login_required   
 def add(request):

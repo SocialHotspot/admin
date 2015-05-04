@@ -22,7 +22,7 @@ def overview(request):
 			c = controller.controller()
 			aps += c.get_aps()
 			
-		except HTTPError:
+		except HTTPError, e:
 			messages.error(request, "The login credentials for controller '"+ controller.name +"' are incorrect.")
 	
 	aps = Hotspot.filter_used(aps)

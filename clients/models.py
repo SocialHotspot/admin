@@ -57,7 +57,7 @@ class Portal(models.Model):
 	base_template = models.CharField(max_length = 255, null = True)
 	
 	def password_enabled(self):
-		return (len(self.guest_password) != 0)
+		return (self.guest_password and len(self.guest_password) != 0)
 		
 	def is_liked(self, graph):
 		return (len(graph.get('me/likes/'+ str(self.facebook_page_id))['data']) > 0)

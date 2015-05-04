@@ -1,0 +1,310 @@
+{% extends 'clients/detail.html' %}
+
+{% block tabs %}
+	{% include 'clients/tabs.html' with active_item='hotspots' %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="steps-container">
+		
+		<div data-role="listview" data-inset="true">
+			<li data-role="list-divider">Client setup</li>
+			
+			<li>
+				<div class="step" id="intro">
+					<p>
+						Before using this client, a Unifi site needs to be setup and relevant settings need to be applied.
+					</p>
+					
+					<button data-theme="a" data-icon="forward" class="submit-button" id="run-all">Run all</button>
+				</div>
+			</li>
+		</div>
+		
+		<div class="step-divider">&darr;</div>
+		
+		<div data-role="listview" data-inset="true">
+			<li data-role="list-divider">Create a Unifi site</li>
+			
+			<li>
+				<div class="step" id="create-unifi-site" data-busy-text="Creating Unifi site..." data-done-text="Unifi site has been created" data-next-step="set-general-settings">
+					
+					<p>
+						A new Unifi site for this specific client needs to be created. Change the site name and ID when neccessary.
+					</p>
+					
+					<hr />
+					
+					<label>Site name:</label>
+					
+					{% if client.city %}
+						<input type="text" name="unifi_site_name" id="unifi_site_name" value="{{ client.company_name }} {{ client.city }}" />
+					{% else %}
+						<input type="text" name="unifi_site_name" id="unifi_site_name" value="{{ client.company_name }}" />
+					{% endif %}
+					
+					<label>Site ID:</label>
+					<input type="text" name="unifi_site_id" id="unifi_site_id" value="{{ unifi_site_id }}" />
+					
+					<button data-theme="b" data-icon="plus" class="submit-button">Create Unifi site</button>
+					
+				</div>
+			</li>
+		</div>
+		
+		<div class="step-divider">&darr;</div>
+		
+		<div data-role="listview" data-inset="true" style="opacity: 0.60;">
+			<li data-role="list-divider">Set general site settings</li>
+			
+			<li>
+				<div class="step" id="set-general-settings" data-busy-text="Updating site settings..." data-done-text="Site settings have been updated" data-next-step="set-guest-portal-settings">
+					<p>
+						Access points need to be attached to the created site. These access points will be moved from the stock site.
+					</p>
+					
+					<button data-theme="b" data-icon="gear" class="submit-button">Set site settings</button>
+				</div>
+			</li>
+		</div>
+		
+		<div class="step-divider">&darr;</div>
+		
+		<div data-role="listview" data-inset="true" style="opacity: 0.60;">
+			<li data-role="list-divider">Set guest portal settings</li>
+			
+			<li>
+				<div class="step" id="set-guest-portal-settings" data-busy-text="Updating guest portal settings..." data-done-text="Guest portal settings have been updated" data-next-step="add-wireless-networks">
+					<p>
+						Access points need to be attached to the created site. These access points will be moved from the stock site.
+					</p>
+					
+					<button data-theme="b" data-icon="gear" class="submit-button">Set guest portal settings</button>
+				</div>
+			</li>
+		</div>
+		
+		<div class="step-divider">&darr;</div>
+		
+		<div data-role="listview" data-inset="true" style="opacity: 0.60;">
+			<li data-role="list-divider">Add wireless networks</li>
+			
+			<li>
+				<div class="step" id="add-wireless-networks" data-busy-text="Adding wireless networks..." data-done-text="Wireless networks have been added" data-next-step="attach-access-points">
+					<p>
+						Access points need to be attached to the created site. These access points will be moved from the stock site.
+					</p>
+					
+					<hr />
+					
+					<label>SSID:</label>
+					<input type="text" id="ssid" value="FREE WIFI {{ client.company_name }}" />
+					
+					<label>Private SSID:</label>
+					<input type="text" id="ssid_private" value="SH {{ client.company_name }}" />
+					
+					<label>Private password:</label>
+					<input type="text" id="password_private" value="12345678" />
+					
+					<button data-theme="b" data-icon="cloud" class="submit-button">Add wireless networks</button>
+				</div>
+			</li>
+		</div>
+		
+		<div class="step-divider">&darr;</div>
+		
+		<div data-role="listview" data-inset="true" style="opacity: 0.60;">
+			<li data-role="list-divider">Attach access points from stock</li>
+			
+			<li>
+				<div class="step" id="attach-access-points" data-busy-text="Moving access points to site..." data-done-text="Access points have been attached">
+					<p>
+						Access points need to be attached to the created site. These access points will be moved from the stock site.
+					</p>
+					
+					<hr />
+					
+					<label>Number of access points:</label>
+					<input type="number" id="number_of_aps" value="1" />
+					
+					<button data-theme="b" data-icon="power" class="submit-button">Attach access points</button>
+				</div>
+			</li>
+		</div>
+				
+		<div id="aps_container" style="display: none;">
+			<hr />
+			
+			<div data-role="listview" data-inset="true" id="aps">
+				
+			</div>
+		</div>
+		
+		<div id="finish" style="text-align: center; margin-top: 60px; margin-bottom: 75px; margin-left: 225px; opacity: 0.4; width: 225px;">
+			<button data-theme="b" data-icon="check" style="font-size: 17pt; font-weight: normal;" data-inline="true">Finish setup &raquo;</button>
+
+			<div>This will set the Unifi site ID.</div>
+		</div>
+		
+		<script type="text/javascript">
+			var commands = {
+				'create-unifi-site': function(cb) {
+					$.post('/unifi/create-site/',
+						   { 
+							   
+							 unifi_site_id: $('#unifi_site_id').val(),
+							 unifi_site_name: $('#unifi_site_name').val(),
+							 unifi_controller: 1
+							 
+						   }, cb);
+				},
+					
+				'set-general-settings': function(cb) {
+					$.post('/unifi/set-general-settings/',
+						   { 
+							   
+							 unifi_site_id: $('#unifi_site_id').val(),
+							 unifi_controller: 1
+							 
+						   }, cb);
+				},
+				
+				'set-guest-portal-settings': function(cb) {
+					$.post('/unifi/set-guest-portal/',
+						   { 
+							   
+							 unifi_site_id: $('#unifi_site_id').val(),
+							 unifi_controller: 1
+							 
+						   }, cb);
+				},
+				
+				'add-wireless-networks': function(cb) {
+					$.post('/unifi/add-wlans/',
+						   { 
+							   
+							 unifi_site_id: $('#unifi_site_id').val(),
+							 unifi_controller: 1,
+							 
+							 ssid: $('#ssid').val(),
+							 ssid_private: $('#ssid_private').val(),
+							 password_private: $('#password_private').val(),
+							 
+						   }, cb);
+				},
+				
+				'attach-access-points': function(cb) {
+					$.post('/clients/detail/{{ client.slug }}/add-hotspots/',
+						   { 
+							   
+							 number_of_aps: $('#number_of_aps').val()
+							 
+						   }, function(data) {
+							   if(data.hotspots) {
+								   data.hotspots.forEach(function(hotspot) {
+									  var line = $('<li><div class="ui-grid-a"><div class="ui-block-a"></div><div class="ui-block-b"></div></div></li>');
+									  
+									  line.find('.ui-block-a').text(hotspot.mac_address);
+									  line.find('.ui-block-b').text(hotspot.external_id);
+									   
+									  $('#aps').append(line);
+								   });
+								   
+								   $('#aps').prepend($('<li data-role="list-divider"></li>').text('Attached access points'));
+								   
+								   $('#aps').listview('refresh');
+								   
+								   $('#aps_container').slideDown();
+								   
+								   cb();
+							   } else {
+							   	   cb(false);
+							   }
+						   }, 'json');
+				}
+			};
+			
+			var running_all = false;
+			
+			var transitionButton = function(button, cb) {
+				var originalText = $(button).text();
+				
+				$(button).text($(button).parent('.step').attr('data-busy-text'));
+					     
+				$(button).animate({ 'opacity': '0.85' }, 250);
+				
+				step_id = $(button).parent('.step').attr('id')
+				
+				commands[step_id](function(success) {
+					if(success != false) {
+						$(button).text($(button).parent('.step').attr('data-done-text'))
+							 .buttonMarkup({ icon: 'check' });
+					} else {
+						$(button).text('Something went wrong.')
+							 .buttonMarkup({ icon: 'alert' });
+					}
+				
+					$(button).parents('.ui-listview')
+					         .animate({ 'opacity': '0.4' }, 250);
+					
+					cb($(button).parent('.step'));
+				});
+			}
+			
+			var nextStep = function(step) {
+				$('#'+ step.attr('data-next-step')).parents('.ui-listview')
+											       .animate({ 'opacity': '1.0' }, 250);
+				
+				if(running_all) {
+
+					if(step.attr('data-next-step')) {
+						$('#'+ step.attr('data-next-step') +' .submit-button').click();
+						
+						$('body').animate({ scrollTop: step.offset().top - $('body').offset().top + $('body').scrollTop() }, '250', 'swing');
+					} else {
+						
+						$('body').animate({ scrollTop: $('#finish').offset().top - $('body').offset().top + $('body').scrollTop() }, '250', 'swing');
+						
+						$('#finish').animate({ 'opacity': '1.0' }, 200);
+						
+					}
+					
+				}
+			}
+			
+			$(document).ready(function() {
+				
+				$('#run-all').click(function() {
+					var clicked = this;
+					running_all = true;
+					
+					$('.submit-button')[1].click();
+					
+				});
+				
+				$('.submit-button').click(function() {
+					if($(this).attr('id') != 'run-all') {
+						transitionButton(this, nextStep);
+					}
+				});
+				
+				$('#finish button').click(function() {
+					$.post('/clients/detail/{{ client.slug }}/set-unifi-site/',
+					   { 
+						   
+						 unifi_site_id: $('#unifi_site_id').val(),
+						 unifi_controller: 1
+						 
+					   }, function(data) {
+						   
+						   window.location.reload();
+						   
+					   });
+				});
+				
+			});
+		</script>
+		
+	</div>
+{% endblock %}
