@@ -57,6 +57,10 @@ def hotspots(request, slug):
 def portal(request, slug):
 	client = Client.objects.get(slug = slug)
 	
+	if request.method == 'POST' and 'logo' in request.FILES:
+		client.portal.logo = request.FILES['logo']
+		client.portal.save()
+	
 	return render(request, 'clients/portal.html', {
 	    'client': client,
 	    'portal': client.portal,

@@ -35,7 +35,7 @@ class Portal(models.Model):
 		
 	client = models.OneToOneField(Client, related_name = 'portal')
 	
-	logo = models.ImageField(upload_to = 'portal_images', null = True)
+	logo = models.ImageField(upload_to = 'logos', null = True)
 	
 	facebook_page_id = models.BigIntegerField(null = True)
 	facebook_page_username = models.CharField(max_length = 255, null = True)

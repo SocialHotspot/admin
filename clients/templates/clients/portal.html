@@ -8,6 +8,25 @@
 	<div class="ui-grid-a">
 		<div class="ui-block-a" style="padding-right: 10px;">
 			<div data-role="listview" data-inset="true">
+				<li data-role="list-divider">Portal design</li>
+				
+				<li>
+					<form method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						
+						<input type="file" name="logo" id="logo" />
+						<input type="submit" data-role="button" value="Upload logo" />
+					</form>
+					
+					{% if portal.logo %}
+					
+					{% else %}
+						<em>No logo uploaded yet.</em>
+					{% endif %}
+				</li>
+			</div>
+			
+			<div data-role="listview" data-inset="true">
 				<li data-role="list-divider">Login methods</li>
 				
 				<li>
