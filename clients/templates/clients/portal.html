@@ -8,7 +8,7 @@
 	<div class="ui-grid-a">
 		<div class="ui-block-a" style="padding-right: 10px;">
 			<div data-role="listview" data-inset="true">
-				<li data-role="list-divider">Portal design</li>
+				<li data-role="list-divider">Logo</li>
 				
 				<li>
 					<form method="post" enctype="multipart/form-data">
@@ -27,6 +27,12 @@
 					{% else %}
 						<em>No logo uploaded yet.</em>
 					{% endif %}
+				</li>
+				
+				<li data-role="list-divider">Colors</li>
+				
+				<li>
+					<input type="text" class="setting-field" id="background_color" value="{{ portal.background_color|default:"#FFFFFF" }}" />
 				</li>
 			</div>
 			

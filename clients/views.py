@@ -77,7 +77,7 @@ def set_portal_settings(request, slug):
 	value = request.POST['value']
 	
 	booleanFields = ['facebook_enabled', 'password_enabled', 'network_password_enabled']
-	valueFields = ['facebook_page_id', 'guest_password', 'wpa_password']
+	valueFields = ['facebook_page_id', 'guest_password', 'wpa_password', 'background_color']
 	
 	if not (setting in booleanFields):
 		
