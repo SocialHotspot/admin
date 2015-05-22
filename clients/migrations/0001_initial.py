@@ -51,7 +51,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('logo', models.ImageField(null=True, upload_to=b'logos')),
-                ('background_color', models.CharField(max_length=7, null=True)),
                 ('facebook_page_id', models.BigIntegerField(null=True)),
                 ('facebook_page_username', models.CharField(max_length=255, null=True)),
                 ('email_enabled', models.BooleanField(default=False)),
