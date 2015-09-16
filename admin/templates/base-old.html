@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load staticfiles %}
+	
+    <link rel="stylesheet" href="{% static 'jquery.mobile-1.4.5.min.css' %}" />
+    
+    <script type="text/javascript" src="{% static 'jquery-2.1.3.min.js' %}"></script>
+    
+    <script type="text/javascript">
+	$(document).bind("mobileinit", function () {
+	    $.mobile.ajaxEnabled = false;
+	});
+	    
+	$.ajaxSetup({ 
+	     beforeSend: function(xhr, settings) {
+	         function getCookie(name) {
+	             var cookieValue = null;
+	             if (document.cookie && document.cookie != '') {
+	                 var cookies = document.cookie.split(';');
+	                 for (var i = 0; i < cookies.length; i++) {
+	                     var cookie = jQuery.trim(cookies[i]);
+	                     // Does this cookie string begin with the name we want?
+	                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                     break;
+	                 }
+	             }
+	         }
+	         return cookieValue;
+	         }
+	         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+	             // Only send the token to relative URLs i.e. locally.
+	             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+	         }
+	     } 
+	});
+	</script>
+	
+	<script type="text/javascript" src="{% static 'jquery.mobile-1.4.5.min.js' %}"></script>
+    
+    <style>
+	    .title-method {
+		    font-weight: normal;
+	    }
+	    
+	    hr {
+		    background-color: #ccc;
+		    border: none;
+		    height: 1px;
+	    }
+	    
+	    .error {
+		    display: block;
+		    
+		    box-sizing: border-box;
+
+		    padding-top: 15px;
+		    padding-bottom: 15px;
+		    padding-left: 15px;
+		    
+		    margin-bottom: 16px;
+		    
+		    background-color: #efefef;
+		    
+		    border-radius: 6px;
+		    border: 1px solid rgb(221, 221, 221);
+		    
+		    font-weight: bold;
+	    }
+	    
+	    .connected {
+		    color: #007700;
+	    }
+	    
+	    .disconnected {
+		    color: #bb0000;
+	    }
+	    
+	    .submit-button {
+		    margin-top: 15px;
+	    }
+	    
+	    .steps-container {
+		    width: 680px;
+		    margin: 0 auto;
+	    }
+	    
+	    .steps-container div[data-role="listview"] {
+		    
+	    }
+	    
+	    .steps-container .step-divider {
+		    text-align: center;
+		    font-size: 16pt;
+		    
+		    color: #9e9e9e;
+	    }
+	    
+	    .ui-listview>li .step p {
+		    font-size: 10pt;
+		    
+		    white-space: normal;
+		    overflow: visible;
+		    text-overflow: inherit;
+	    }
+	    
+	    li .step label {
+		    font-size: 10pt;
+		    
+		    margin-top: 5px;
+	    }
+	    
+	    li .step hr {
+		    margin-bottom: 15px;
+	    }
+	    
+	    li .step .ui-input-text {
+		    margin-bottom: 15px;
+	    }
+	    
+	    @media only screen and (max-width : 780px) {
+				
+			.steps-container {
+				width: 100%;
+			}
+		}
+	</style>
+    
+    <title>{% block title %}Social Hotspot{% endblock %}</title>
+</head>
+
+<body>
+	<div data-role="page" data-url="{{ request.get_full_path }}">
+ 
+        <div data-role="header" data-theme="b">
+	        <h1>{% block header %}{% endblock %}</h1>
+	        
+            {% block menu %}
+            	{% include 'menu.html' %}
+            {% endblock %}
+
+			{% block tabs %}{% endblock %}
+        </div>
+ 
+        <div data-role="content">
+            {% block content %}{% endblock %}
+        </div>
+ 
+    </div>
+</body>
+</html>

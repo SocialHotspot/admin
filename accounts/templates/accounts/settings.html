@@ -3,8 +3,8 @@
 {% block title %}Account settings{% endblock %}
 {% block header %}Account settings &mdash; {{ request.user.first_name }} {{ request.user.last_name }}{% endblock %}
 
-{% block menu %}
-	{% include 'menu.html' with active_item='account' %}
+{% block sidebar %}
+	{% include 'sidebar.html' with active_item='account' %}
 {% endblock %}
 
 {% block content %}

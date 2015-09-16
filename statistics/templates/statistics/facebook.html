@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Facebook statistics{% endblock %}
+{% block header %}Facebook statistics{% endblock %}
+
+{% block sidebar %}
+	{% include 'sidebar.html' with active_item='statistics' active_subitem='facebook' %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-md-4">
+
+			<!-- START widget-->
+			<div class="panel widget bg-primary">
+				<div class="row row-table">
+					<div class="col-xs-4 text-center bg-primary-dark pv-lg">
+					   <em class="icon-like fa-3x"></em>
+					</div>
+					<div class="col-xs-8 pv-lg">
+					   <div class="h2 mt0">543</div>
+					   <div class="text-uppercase">Likes</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="col-md-4">
+			<!-- START widget-->
+			<div class="panel widget bg-purple">
+				<div class="row row-table">
+					<div class="col-xs-4 text-center bg-purple-dark pv-lg">
+					   <em class="icon-pin fa-3x"></em>
+					</div>
+					<div class="col-xs-8 pv-lg">
+					   <div class="h2 mt0">1723</div>
+					   <div class="text-uppercase">Check-ins</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-4">
+			<!-- START widget-->
+			<div class="panel widget bg-green">
+				<div class="row row-table">
+					<div class="col-xs-4 text-center bg-green-dark pv-lg">
+					   <em class="icon-bubbles fa-3x"></em>
+					</div>
+					<div class="col-xs-8 pv-lg">
+					   <div class="h2 mt0">103</div>
+					   <div class="text-uppercase">Reviews</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<legend>Like history</legend>
+					
+					<div class="chart-spline flot-chart"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<legend>Check-in history</legend>
+					
+					<div class="chart-spline-2 flot-chart"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	{% block scripts %}
+		<script src="{% static 'theme/vendor/Flot/jquery.flot.js' %}"></script>
+		<script src="{% static 'theme/vendor/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
+		<script src="{% static 'theme/vendor/Flot/jquery.flot.resize.js' %}"></script>
+		<script src="{% static 'theme/vendor/Flot/jquery.flot.pie.js' %}"></script>
+		<script src="{% static 'theme/vendor/Flot/jquery.flot.time.js' %}"></script>
+		<script src="{% static 'theme/vendor/Flot/jquery.flot.categories.js' %}"></script>
+		<script src="{% static 'theme/vendor/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+		
+		<script src="{% static 'theme/js/chart.js' %}"></script>
+	{% endblock %}
+	
+{% endblock %}

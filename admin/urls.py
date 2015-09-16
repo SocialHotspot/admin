@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^stock/', include('stock.urls', namespace='stock')),
     
     url(r'^unifi/', include('unifi_control.urls', namespace='unifi')),
+    
+    url(r'^statistics/', include('statistics.urls', namespace='statistics')),
 )
