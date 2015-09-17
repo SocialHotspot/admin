@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load sekizai_tags %}
+
 <head>
    <meta charset="utf-8">
    
@@ -103,15 +105,16 @@
    <script src="{% static 'theme/vendor/slimScroll/jquery.slimscroll.min.js' %}"></script>
    <!-- SCREENFULL-->
    <script src="{% static 'theme/vendor/screenfull/dist/screenfull.js' %}"></script>
+   
    <!-- LOCALIZE-->
-   <script src="{% static 'theme/vendor/jquery-localize-i18n/dist/jquery.localize.js' %}"></script>
+   <!-- <script src="{% static 'theme/vendor/jquery-localize-i18n/dist/jquery.localize.js' %}"></script> -->
 	
-   <!-- =============== APP SCRIPTS ===============-->
-   {% block scripts %}{% endblock %}
+	<!-- =============== APP SCRIPTS ===============-->
+	{% render_block 'js' %}
    
-   <script src="{% static 'theme/js/app.js' %}"></script>
-   
-   <script type="text/javascript">
+	<script src="{% static 'theme/js/app.js' %}"></script>
+	
+	<script type="text/javascript">
 	if (window.navigator.standalone) {
 	    var a=document.getElementsByTagName("a");
 		for(var i=0;i<a.length;i++)
@@ -123,6 +126,6 @@
 		    }
 		}
 	}
-   </script>
+	</script>
 </body>
 </html>

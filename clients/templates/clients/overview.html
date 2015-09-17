@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load sekizai_tags %}
 
 {% block stylesheets %}
    <!-- DATATABLES-->
@@ -16,6 +17,14 @@
 {% endblock %}
 
 {% block content %}
+
+	{% addtoblock 'js' %}
+		<script src="{% static 'theme/vendor/datatables/media/js/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'theme/vendor/datatable-bootstrap/js/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'theme/vendor/datatable-bootstrap/js/dataTables.bootstrapPagination.js' %}"></script>
+		
+		<script src="{% static 'theme/js/datatable.js' %}"></script>
+	{% endaddtoblock %}
 
 	<div class="row">
 		<div class="col-md-8">
@@ -36,7 +45,11 @@
 								{% for client in clients %}
 									<tr>
 										<td>{{ client.pk }}</td>
-										<td>{{ client.company_name }}</td>
+										<td>
+											<a href="{% url 'clients:detail' client.slug %}">
+												{{ client.company_name }}
+											</a>
+										</td>
 										<td>{{ client.contact_name }}</td>
 									</tr>
 								{% empty %}
@@ -77,15 +90,5 @@
 			</div>
 		</div>
 	</div>
-	
-	{% block scripts %}
-	   <!-- DATATABLES-->
-	   <script src="{% static 'theme/vendor/datatables/media/js/jquery.dataTables.min.js' %}"></script>
-	   <script src="{% static 'theme/vendor/datatables-colvis/js/dataTables.colVis.js' %}"></script>
-	   <script src="{% static 'theme/vendor/datatable-bootstrap/js/dataTables.bootstrap.js' %}"></script>
-	   <script src="{% static 'theme/vendor/datatable-bootstrap/js/dataTables.bootstrapPagination.js' %}"></script>
-	   
-	   <script src="{% static 'theme/js/datatable.js' %}"></script>
-	{% endblock %}
 	
 {% endblock %}
